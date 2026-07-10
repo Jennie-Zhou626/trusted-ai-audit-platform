@@ -26,7 +26,7 @@ import requests
 API = "http://127.0.0.1:8000/api"
 
 requests.get(f"{API}/health", timeout=5).raise_for_status()
-result = requests.post(f"{API}/demo/seed-showcase", data={"reset": "true"}, timeout=30).json()
+result = requests.post(f"{API}/samples/seed-sample", data={"reset": "true"}, timeout=30).json()
 audits = requests.get(f"{API}/audits", timeout=5).json()
 
 if result["normal_audit"] != "passed":

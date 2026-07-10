@@ -30,7 +30,7 @@
 - `GET/POST /api/audits`
 - `GET /api/evidence-chain/{model_version_id}`
 - `GET /api/chain/status`
-- `POST /api/demo/tamper-model`
+- `POST /api/samples/tamper-model`
 
 ## 说明
 

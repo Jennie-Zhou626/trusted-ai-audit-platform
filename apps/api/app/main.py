@@ -7,7 +7,7 @@ from .routers import (
     audits,
     chain,
     datasets,
-    demo,
+    samples,
     evidence,
     model_versions,
     organizations,
@@ -46,5 +46,5 @@ app.include_router(model_versions.router)
 app.include_router(audits.router)
 app.include_router(evidence.router)
 app.include_router(chain.router)
-app.include_router(demo.router)
+app.include_router(samples.router)
 app.include_router(admin.router)

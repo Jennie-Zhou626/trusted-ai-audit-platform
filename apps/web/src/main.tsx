@@ -379,7 +379,7 @@ function App() {
       return;
     }
     try {
-      await postEmpty("/demo/tamper-model", new URLSearchParams({ model_version_id: modelVersionId }));
+      await postEmpty("/samples/tamper-model", new URLSearchParams({ model_version_id: modelVersionId }));
       setMessage(`模型版本 #${modelVersionId} 的链下文件已被篡改。再次审计应失败。`);
       await refresh();
     } catch (err) {
@@ -400,7 +400,7 @@ function App() {
       setEvidence(null);
       setAuditReport(null);
       setChainModelId("");
-      setMessage("平台数据已清空，可以从机构和项目创建开始现场录入。");
+      setMessage("平台数据已清空，可以从机构和项目创建开始录入。");
       await refresh();
     } catch (err) {
       setMessage(err instanceof Error ? err.message : String(err));
@@ -854,7 +854,7 @@ function App() {
 
         {active === "chain" && (
           <section className="panel">
-            <h2>证据链展示</h2>
+            <h2>证据链追溯</h2>
             <div className="lookup">
               <label>
                 模型版本 ID
@@ -876,7 +876,7 @@ function App() {
               </label>
               <button onClick={() => loadAuditReport(latestModelId)}>生成报告</button>
             </div>
-            {auditReport ? <AuditReportView report={auditReport} /> : <p className="empty">生成报告后，这里会展示可信评分、优势、风险和改进建议。</p>}
+            {auditReport ? <AuditReportView report={auditReport} /> : <p className="empty">生成报告后，这里会列出可信评分、优势、风险和改进建议。</p>}
           </section>
         )}
 
@@ -1090,7 +1090,7 @@ function EvidencePreview({
 }) {
   const model = models[0];
   const audit = model ? audits.find((item) => item.model_version_id === model.id) : undefined;
-  if (!model) return <p className="empty">登记模型版本后，这里会展示证据链。</p>;
+  if (!model) return <p className="empty">登记模型版本后，这里可查看证据链。</p>;
   const nodes = [
     ["数据集版本", "由训练任务引用"],
     ["训练任务", `task #${model.training_task_id}`],

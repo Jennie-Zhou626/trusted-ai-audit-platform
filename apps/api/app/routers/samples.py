@@ -12,7 +12,7 @@ from ..services.cleanup import reset_all_runtime_data
 from ..utils.hashing import sha256_file, sha256_text
 from .audits import build_audit_checks
 
-router = APIRouter(prefix="/api/demo", tags=["demo"])
+router = APIRouter(prefix="/api/samples", tags=["samples"])
 
 
 def store_example_file(source: Path, object_type: str) -> int:
@@ -72,12 +72,12 @@ def check_file(file_id: int, expected_hash: str, label: str) -> dict:
     }
 
 
-@router.post("/seed-showcase")
-def seed_showcase(reset: bool = Form(True)):
+@router.post("/seed-sample")
+def seed_sample(reset: bool = Form(True)):
     if reset:
         reset_all_runtime_data()
 
-    sample = ROOT_DIR / "examples" / "showcase"
+    sample = ROOT_DIR / "examples" / "sample"
     required = [
         sample / "data" / "iris_org_a.csv",
         sample / "data" / "iris_org_b.csv",
@@ -88,7 +88,7 @@ def seed_showcase(reset: bool = Form(True)):
     ]
     missing = [str(path) for path in required if not path.exists()]
     if missing:
-        raise HTTPException(status_code=500, detail={"缺少演示文件": missing})
+        raise HTTPException(status_code=500, detail={"缺少样例文件": missing})
 
     with connect() as conn:
         project_id = conn.execute(
@@ -97,7 +97,7 @@ def seed_showcase(reset: bool = Form(True)):
             VALUES (?, ?)
             """,
             (
-                "多机构 Iris 分类模型可信审计展示项目",
+                "多机构 Iris 分类模型可信审计样例项目",
                 "机构A与机构B共同提供训练数据，训练方登记模型版本，审计方验证训练过程证据链。",
             ),
         ).lastrowid
@@ -225,7 +225,7 @@ def seed_showcase(reset: bool = Form(True)):
             "organization": "机构A 数据治理中心",
             "local_epochs": 2,
             "sample_count": 75,
-            "checkpoint_uri": "ipfs://demo-iris-round-1-org-a",
+            "checkpoint_uri": "ipfs://sample-iris-round-1-org-a",
             "privacy_method": "federated-learning",
         },
         {
@@ -233,7 +233,7 @@ def seed_showcase(reset: bool = Form(True)):
             "organization": "机构B 联合实验室",
             "local_epochs": 2,
             "sample_count": 75,
-            "checkpoint_uri": "ipfs://demo-iris-round-1-org-b",
+            "checkpoint_uri": "ipfs://sample-iris-round-1-org-b",
             "privacy_method": "federated-learning",
         },
         {
@@ -241,7 +241,7 @@ def seed_showcase(reset: bool = Form(True)):
             "organization": "联合训练服务方",
             "local_epochs": 1,
             "sample_count": 150,
-            "checkpoint_uri": "ipfs://demo-iris-global-checkpoint-v1",
+            "checkpoint_uri": "ipfs://sample-iris-global-checkpoint-v1",
             "privacy_method": "hash-only",
         },
     ]
@@ -286,12 +286,12 @@ def seed_showcase(reset: bool = Form(True)):
         (
             "Iris 分类模型 v1 - 正常版本",
             "iris_model_v1.pkl",
-            '{"accuracy":0.9667,"f1_score":0.9615,"showcase":"normal"}',
+            '{"accuracy":0.9667,"f1_score":0.9615,"sample_status":"normal"}',
         ),
         (
-            "Iris 分类模型 v2 - 篡改演示版本",
+            "Iris 分类模型 v2 - 篡改检测样例",
             "iris_model_v2.pkl",
-            '{"accuracy":0.9733,"f1_score":0.9700,"showcase":"tamper-demo"}',
+            '{"accuracy":0.9733,"f1_score":0.9700,"sample_status":"tampered"}',
         ),
     ]:
         model_file = store_example_file(sample / "models" / filename, "models")
@@ -317,9 +317,9 @@ def seed_showcase(reset: bool = Form(True)):
                 ).lastrowid
             )
 
-    audit_v1 = create_audit_record(model_ids[0], "展示项目：正常模型版本自动审计")
+    audit_v1 = create_audit_record(model_ids[0], "样例项目：正常模型版本自动审计")
     tamper_model(model_ids[1])
-    audit_v2 = create_audit_record(model_ids[1], "展示项目：模型文件被篡改后的复核审计")
+    audit_v2 = create_audit_record(model_ids[1], "样例项目：模型文件被篡改后的复核审计")
 
     return {
         "project_id": project_id,
@@ -344,6 +344,6 @@ def tamper_model(model_version_id: int = Form(...)):
         raise HTTPException(status_code=404, detail="未找到模型文件")
 
     with open(file_row["stored_path"], "ab") as f:
-        f.write(b"\n# tampered-by-demo")
+        f.write(b"\n# tampered-for-integrity-check")
 
     return {"status": "已篡改", "model_version_id": model_version_id}

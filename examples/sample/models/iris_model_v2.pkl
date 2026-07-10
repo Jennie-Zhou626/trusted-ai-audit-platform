@@ -1,0 +1,4 @@
+logistic-regression-sample-model
+version=v2
+source=org-a+org-b
+status=registered-before-integrity-check

@@ -20,4 +20,4 @@ if (-not $python) {
 }
 
 Set-Location $root
-& $python "$root/scripts/seed_showcase_project.py"
+& $python "$root/scripts/seed_sample_project.py"

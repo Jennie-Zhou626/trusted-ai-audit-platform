@@ -1,4 +1,4 @@
-logistic-regression-demo-model
+logistic-regression-sample-model
 version=v1
 source=org-a+org-b
 status=registered
