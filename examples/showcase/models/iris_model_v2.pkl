@@ -1,0 +1,4 @@
+logistic-regression-demo-model
+version=v2
+source=org-a+org-b
+status=registered-before-tamper-demo

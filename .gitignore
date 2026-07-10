@@ -1,0 +1,11 @@
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.venv/
+storage/runtime/
+apps/api/tmp_test_files/
+contracts/artifacts/
+contracts/cache/
+contracts/deployment.json
+.env

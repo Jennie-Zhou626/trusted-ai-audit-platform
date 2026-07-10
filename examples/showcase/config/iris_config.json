@@ -1,0 +1,12 @@
+{
+  "algorithm": "LogisticRegression",
+  "random_state": 42,
+  "max_iter": 200,
+  "feature_columns": [
+    "sepal_length",
+    "sepal_width",
+    "petal_length",
+    "petal_width"
+  ],
+  "target_column": "species"
+}
